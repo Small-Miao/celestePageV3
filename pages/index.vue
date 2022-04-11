@@ -2,12 +2,19 @@
   <div>
     <div id="background">
       <div id="cogwheel"></div>
+      <div id="miao"></div>
     </div>
-      <CelesteHeader />
+    <CelesteHeader />
     <div class="content">
       <div class="slideBar">
         <CelesteAccount />
-        <CelesteServerStatus style="margin-top:6%;"/>
+        <CelesteServerStatus style="margin-top: 6%" />
+        <CelesteDevInfo style="margin-top: 6%" />
+      </div>
+      <div class="mainList">
+        <CelesteInfo />
+        <CelesteServerEvent style="margin-top: 4%" />
+        <CelesteChatLive style="margin-top: 4%" />
       </div>
     </div>
   </div>
@@ -19,6 +26,12 @@ export default {
 };
 </script>
 <style>
+.mainList {
+  display: flex;
+  flex-direction: column;
+  margin-left: 5vw;
+  margin-top: 30px;
+}
 .headerBackGround {
   background: #130b25;
 }
@@ -50,6 +63,18 @@ body {
   background-size: 100%;
   pointer-events: none;
   opacity: 0.4;
+}
+#miao {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 900px;
+  max-width: calc(min(50vw, 50vh));
+  height: 900px;
+  max-height: calc(min(50vw, 50vh));
+  background: url("../static/miao.png");
+  background-size: 100%;
+  pointer-events: none;
 }
 
 @keyframes cogwheel-spin {

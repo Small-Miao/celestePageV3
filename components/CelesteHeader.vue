@@ -16,7 +16,7 @@
         <a
           id="toplink-manual"
           class="button"
-          href="https://gamebanana.com/gamefiles/12267"
+          href="https://jq.qq.com/?_wv=1027&k=nlmVcz7C"
           ><i class="fa fa-commenting fa-3x toplink-icon" style="margin-top:10px;margin-right:30px;"></i
           ><span class="toplink-text">加入Celeste交流群</span></a
         >

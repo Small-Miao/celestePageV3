@@ -20,11 +20,11 @@
   background: #0f0e1a;
   color: white;
 }
-.el-card__header {
+.box-card .el-card__header {
   border-bottom: 0px;
   padding-bottom: 5px;
 }
-.el-card__body {
+.box-card .el-card__body {
   padding-top: 5px;
 }
 </style>
