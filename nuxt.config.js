@@ -4,7 +4,7 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'celestePageV3',
+    title: '蔚蓝群服MiaoNet',
     htmlAttrs: {
       lang: 'en'
     },

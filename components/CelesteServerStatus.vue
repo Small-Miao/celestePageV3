@@ -15,6 +15,11 @@
     </div>
   </el-card>
 </template>
+<script>
+export default {
+    
+}
+</script>
 <style>
 .box-card {
   background: #0f0e1a;
