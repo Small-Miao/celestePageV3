@@ -41,8 +41,15 @@ export default {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
+    'nuxt-socket-io',
   ],
-
+  io: {
+    // module options
+    sockets: [{
+      name: 'main',
+      url: 'http://localhost:3001'
+    }]
+  },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
   }

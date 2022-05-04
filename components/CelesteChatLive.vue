@@ -5,9 +5,9 @@
     </div>
     <el-table :data="chatData" :show-header="status" stripe style="width: 100%">
       <el-table-column prop="id">
-            <template slot-scope="scope">
-                {{scope.row.time}} {{scope.row.id}}:{{scope.row.chat}}
-            </template>
+        <template slot-scope="scope">
+          {{ scope.row.time }} {{ scope.row.id }}:{{ scope.row.chat }}
+        </template>
       </el-table-column>
     </el-table>
   </el-card>
@@ -16,7 +16,7 @@
 export default {
   data() {
     return {
-      status:false,
+      status: false,
       chatData: [
         {
           id: "[Admin]Small_Miao",
@@ -24,7 +24,20 @@ export default {
           chat: "Hello World！",
         },
       ],
+      socket: undefined
     };
+  },
+  mounted() {
+    this.socket = this.$nuxtSocket({
+        name:"main"
+    });
+    this.socket.on("serverMsg",(name,time,msg)=>{
+        this.chatData.push({
+            id:name,
+            time:name,
+            chat:msg
+        })
+    })
   },
 };
 </script>
@@ -33,7 +46,7 @@ export default {
   width: 65vw;
   height: 45vh;
 }
-.chat .el-card__body{
-    padding: 5px;
+.chat .el-card__body {
+  padding: 5px;
 }
 </style>
