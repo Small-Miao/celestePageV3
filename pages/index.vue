@@ -6,8 +6,22 @@
     </div>
     <CelesteHeader />
     <div class="content">
+      <el-dialog title="登录" width="30%" :visible.sync="loginVisible">
+        <el-row>
+          <el-input v-model="username" placeholder="请输入用户名"></el-input>
+        </el-row>
+        <el-row>
+          <el-input
+            v-model="password"
+            show-password
+            placeholder="请输入密码"
+            style="margin-top: 2%"
+          ></el-input>
+        </el-row>
+        <el-row style="margin-top:2%"><el-button style="float:right;" type="primary" @click="login()">登录</el-button><el-button style="float:right;margin-right:1%;" type="warning">忘记密码</el-button></el-row>
+      </el-dialog>
       <div class="slideBar">
-        <CelesteAccount />
+        <CelesteAccount :showLoginDialog="showLoginDialog" ref ="loginMethod"/>
         <CelesteServerStatus style="margin-top: 6%" />
         <CelesteDevInfo style="margin-top: 6%" />
       </div>
@@ -23,6 +37,21 @@
 <script>
 export default {
   name: "IndexPage",
+  data() {
+    return {
+      loginVisible: false,
+      username: "",
+      password: "",
+    };
+  },
+  methods: {
+    showLoginDialog() {
+      this.loginVisible = true;
+    },
+    login(){
+
+    }
+  },
 };
 </script>
 <style>

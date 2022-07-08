@@ -16,7 +16,7 @@
         <a
           id="toplink-manual"
           class="button"
-          href="http://centralteam.cn:222/miao/GroupMode/Miao.CelesteNet.Client.zip"
+          href="http://centralteam.cn:222/miao/GroupMode/Miao.CelesteNet.SpeedrunLeaderboard.zip"
           ><i class="fa fa-download fa-3x toplink-icon"></i
           ><span class="toplink-text">下载 MOD附属</span></a
         >

@@ -42,6 +42,8 @@ export default {
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     'nuxt-socket-io',
+    "@nuxtjs/axios",
+    "@nuxtjs/proxy"
   ],
   io: {
     // module options
@@ -50,6 +52,21 @@ export default {
       url: 'http://localhost:3001'
     }]
   },
+  axios: {
+		prefix: "/api", // 配置请求接口前缀
+		proxy: true // 开启代理
+	},
+	// 配置代理
+	proxy: {
+		"/api": {
+			// 配置接口地址
+			target: "http://localhost:3001/api/",
+			pathRewrite: {
+				"^/api/":"/"
+			},
+			changeOrigin: true
+		}
+	},
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
   }

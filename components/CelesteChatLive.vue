@@ -28,7 +28,7 @@ export default {
     };
   },
   mounted() {
-    this.socket = this.$nuxtSocket({
+    /*this.socket = this.$nuxtSocket({
         name:"main"
     });
     this.socket.on("serverMsg",(name,time,msg)=>{
@@ -37,7 +37,7 @@ export default {
             time:name,
             chat:msg
         })
-    })
+    })*/
   },
 };
 </script>
