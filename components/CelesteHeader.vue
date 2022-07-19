@@ -7,7 +7,7 @@
         <a
           id="toplink-manual"
           class="button"
-          href="https://gamebanana.com/gamefiles/12267"
+          href="http://centralteam.cn:222/miao/GroupMode/Miao.CelesteNet.Client.zip"
           ><i class="fa fa-download fa-3x toplink-icon"></i
           ><span class="toplink-text">下载 CelesteMiaoNet</span></a
         >
@@ -16,8 +16,20 @@
         <a
           id="toplink-manual"
           class="button"
-          href="https://gamebanana.com/gamefiles/12267"
-          ><i class="fa fa-commenting fa-3x toplink-icon" style="margin-top:10px;margin-right:30px;"></i
+          href="http://centralteam.cn:222/miao/GroupMode/Miao.CelesteNet.SpeedrunLeaderboard.zip"
+          ><i class="fa fa-download fa-3x toplink-icon"></i
+          ><span class="toplink-text">下载 MOD附属</span></a
+        >
+      </li>
+      <li>
+        <a
+          id="toplink-manual"
+          class="button"
+          href="https://jq.qq.com/?_wv=1027&k=nlmVcz7C"
+          ><i
+            class="fa fa-commenting fa-3x toplink-icon"
+            style="margin-top: 10px; margin-right: 30px"
+          ></i
           ><span class="toplink-text">加入Celeste交流群</span></a
         >
       </li>

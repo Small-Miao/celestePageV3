@@ -4,7 +4,7 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'celestePageV3',
+    title: '蔚蓝群服MiaoNet',
     htmlAttrs: {
       lang: 'en'
     },
@@ -45,28 +45,36 @@ export default {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
-    '@nuxtjs/axios',
+    'nuxt-socket-io',
+    "@nuxtjs/axios",
+    "@nuxtjs/proxy"
   ],
-
+  io: {
+    // module options
+    sockets: [{
+      name: 'main',
+      url: 'http://localhost:3001'
+    }]
+  },
+  axios: {
+		prefix: "/api", // 配置请求接口前缀
+		proxy: true // 开启代理
+	},
+	// 配置代理
+	proxy: {
+		"/api": {
+			// 配置接口地址
+			target: "http://localhost:3001/api/",
+			pathRewrite: {
+				"^/api/":"/"
+			},
+			changeOrigin: true
+		}
+	},
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     extend(config, ctx) {
     },
     vendor: ['axios'] // 为防止重复打包
-  },
-  axios: {
-    proxy: true,
-    // prefix: '/api/',
-    credentials: true
-    // See https://github.com/nuxt-community/axios-module#options
-  },
-  proxy: {
-    '/api/': {
-      target: 'http://127.0.0.1:3001/', //这个网站是开源的可以请求到数据的
-      pathRewrite: {
-        '^/api/': '',
-        changeOrigin: true
-      }
-    }
   },
 }
