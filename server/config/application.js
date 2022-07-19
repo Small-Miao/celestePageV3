@@ -17,5 +17,7 @@ module.exports = {
     user:'root',
     password:'123456',
     database:'celeste'
-  }
+  },
+  //是否显示mysql执行的一些详细信息
+  showMySqlLog:false
 }

@@ -4,6 +4,7 @@ const port = 3001
 const log = require("./log")
 const redisCache = require('./util/redis.js')
 const bodyParser = require('body-parser')
+const cookieParser = require('cookie-parser')
 //登录白名单 放到这个名单里的请求，都是可以不需要登录就可以访问的
 // let LoginWhiteList  = ['/api/login'];
 let LoginWhiteList  = [];
@@ -35,13 +36,15 @@ let filter = async (req, res, next) => {
   }
   next();
 }
-app.use(filter);
+// app.use(filter);
 
 app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json
 app.use(bodyParser.json())
-app.use('/api',require('./api/index.js'));
-app.use('/api', require("./api/user.js"));
+app.use(cookieParser("Miao"))
+app.use('/',require('./api/index.js'));
+app.use('/', require("./api/user.js"));
+app.use('/', require("./api/normal.js"));
 
 app.listen(port,()=>{
     log.info("Express",undefined,undefined,`Server Listening on port ${port}`);

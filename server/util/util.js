@@ -16,15 +16,10 @@ let getUuid = function() {
   return uuid.replaceAll("-","");
 }
 
-let responseModel = async function (obj){
-  return new Promise((resolve, reject) => {
-    resolve(obj);
-  })
-}
 /**
  * 暴漏出这个方法
  * @type {function(): string}
  */
-module.exports = {getUuid,responseModel}
+module.exports = {getUuid}
 
 
