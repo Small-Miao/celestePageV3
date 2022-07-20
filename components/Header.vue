@@ -14,7 +14,11 @@ export default {
     }
   },
   created() {
-    this.loginName = localStorage.getItem("USERNAME");
+    let info = localStorage.getItem("USERINFO");
+    let userInfo  = eval ("(" + info + ")");
+    this.loginName = userInfo.username;
+    // let info = JSON.stringify(userInfo);
+    // this.loginName = info.username;
   },
   methods:{
     logout(){
@@ -24,14 +28,13 @@ export default {
         url:'/api/admin/logout',
       }).then((res)=>{
         if (res.data.code == 200) {
-          localStorage.setItem("USERNAME", '');
-          localStorage.setItem("token", '');
+          localStorage.setItem("USERINFO", null);
           self.$message({
             message: "退出成功",
             type: "success",
             showClose: true,
           });
-          self.$router.push({path:'/adminLogin'});
+          self.$router.push({path:'/4zxc1we6r/adminLogin'});
         } else{
           self.$message({
             message: "未知异常",

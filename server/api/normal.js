@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const svgCaptcha = require('svg-captcha')
-// res.cookie()设置cookie值, req.cookies获取cookie值
+
 // 获取图行验证码
 router.get('/captcha', (req, res) => {
   const captcha = svgCaptcha.create({
@@ -16,7 +16,7 @@ router.get('/captcha', (req, res) => {
     background: '#cc9966', // 验证码图片背景颜色
   })
   //保存到cookie,忽略大小写
-  res.cookie('captcha', captcha.text.toLowerCase())
+  req.session.captcha = captcha.text.toLowerCase();
   res.type('svg')
   res.send(captcha.data)
 })

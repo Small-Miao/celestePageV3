@@ -8,8 +8,8 @@
   </div>
 </template>
 <script>
-import HeaderBar from '../components/Header'
-import footerBar from '../components/Footer'
+import HeaderBar from '../../components/Header'
+import footerBar from '../../components/Footer'
 export default {
   name: "admin",
   components: {

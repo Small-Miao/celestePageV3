@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import footerBar from '../components/Footer'
+import footerBar from '../../components/Footer'
 export default {
   name: "login",
   components: {
@@ -105,14 +105,13 @@ export default {
         data: self.form,
       }).then((res) => {
           if (res.data.code == 200) {
-            localStorage.setItem("USERNAME", res.data.username);
-            localStorage.setItem("token", res.data.token);
+            localStorage.setItem("USERINFO", JSON.stringify(res.data));
             self.$message({
               message: res.data.username+",欢迎！！",
               type: "success",
               showClose: true,
             });
-            self.$router.push({path:'/admin/home'});
+            self.$router.push({path:'/4zxc1we6r/admin/home'});
           } else if(res.data.code === 400){
             self.$message({
               message: "参数非法",
@@ -177,7 +176,7 @@ export default {
   width: 100%;
   height: 100%;
   min-width: 1000px;
-  background-image: url("../static/background.jpg");
+  background-image: url("../../static/background.jpg");
   background-size: 100% 100%;
   background-position: center center;
   overflow: auto;

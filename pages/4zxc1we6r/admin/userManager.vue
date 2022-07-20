@@ -319,7 +319,7 @@ export default {
       let self = this;
       this.$http({
         method: 'post',
-        url: '/api/user/list',
+        url: '/api/admin/user/list',
         data: {
           'search': self.search,
           'page': self.currentPage,
@@ -384,7 +384,7 @@ export default {
       let self = this;
       this.$http({
         method: 'post',
-        url: '/api/user/add',
+        url: '/api/admin/user/add',
         data: self.form,
       }).then((res)=>{
         if(res.data.code == 200){
@@ -439,7 +439,7 @@ export default {
       let self = this;
       this.$http({
         method: 'post',
-        url: '/api/user/edit',
+        url: '/api/admin/user/edit',
         data: self.editModel,
       }).then((res)=>{
         if(res.data.code == 200){
@@ -478,7 +478,7 @@ export default {
       let self = this;
       this.$http({
         method: 'post',
-        url: '/api/user/resetPassword',
+        url: '/api/admin/user/resetPassword',
         data: {
           gm_uid:self.resetPassModelUid,
           newpassword:self.resetPasswordForm.newPassword,
@@ -516,7 +516,7 @@ export default {
       let self = this;
       this.$http({
         method: 'post',
-        url: '/api/user/del',
+        url: '/api/admin/user/del',
         data: {
           gm_uids:self.multipleSelection
         },
@@ -533,7 +533,7 @@ export default {
       })
     },
     goBack(){
-      this.$router.push({path:'/admin/home'})
+      this.$router.push({path:'/4zxc1we6r/admin/home'})
     }
 
   },

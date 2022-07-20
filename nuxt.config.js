@@ -34,6 +34,7 @@ export default {
       ssr: true
     },
     '@/plugins/NuxtAxios',
+    '@/plugins/routerFilter.js'
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -64,7 +65,7 @@ export default {
 	proxy: {
 		"/api": {
 			// 配置接口地址
-			target: "http://localhost:3001/api/",
+			target: "http://localhost:3001/",
 			pathRewrite: {
 				"^/api/":"/"
 			},
