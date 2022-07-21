@@ -29,7 +29,12 @@ export default {
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     '@/plugins/antd-ui',
-    '@/plugins/element-ui'
+    {
+      src: '@/plugins/element-ui',
+      ssr: true
+    },
+    '@/plugins/NuxtAxios',
+    '@/plugins/routerFilter.js'
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -60,7 +65,7 @@ export default {
 	proxy: {
 		"/api": {
 			// 配置接口地址
-			target: "http://localhost:3001/api/",
+			target: "http://localhost:3001/",
 			pathRewrite: {
 				"^/api/":"/"
 			},
@@ -69,5 +74,8 @@ export default {
 	},
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
-  }
+    extend(config, ctx) {
+    },
+    vendor: ['axios'] // 为防止重复打包
+  },
 }

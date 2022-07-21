@@ -9,6 +9,10 @@ client.on('error', (err) => console.log('Redis Client Error', err));
 
 client.connect();
 
+// 监听错误信息
+client.on('error', err => {
+  console.error(err) // 打印监听到的错误信息
+})
 function redisCache() {}
 
 
@@ -73,5 +77,18 @@ redisCache.expire = async function(key, time) {
     }
     return 0;
 };
+
+/**
+ * 删除redis的 key
+ * @param key String类型  只能为String类型
+ * @returns {Promise<number>}
+ */
+redisCache.delKey = async function(key){
+  let result = await client.del(key+"");
+  if(result){
+    return 1;
+  }
+  return 0;
+}
 
 module.exports = redisCache;
