@@ -20,8 +20,16 @@
               :size="size"
               src="https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png"
             ></el-avatar>
-            <span style="margin-top: 0.7vh; margin-left: 1vw">Small_Miao</span>
-            <div style="margin-top: 0.7vh; margin-left: 1vw"><a-tag color="#2db7f5"> Stuff </a-tag></div>
+            <span style="margin-top: 0.7vh; margin-left: 1vw">{{
+              userInfo.userName
+            }}</span>
+            <div
+              style="margin-top: 0.7vh; margin-left: 1vw"
+              v-for="tag in userInfo.tags"
+              :key="tag"
+            >
+              <a-tag :color="tag.tagColor"> {{ tag.tagName }} </a-tag>
+            </div>
           </el-card>
         </el-row>
         <el-row>
@@ -29,19 +37,23 @@
             <div class="playerRankInfo">
               <div>
                 <div style="font-size: 12px">服务器排名</div>
-                <span class="playerRankText">#1</span>
+                <span class="playerRankText">#{{ userInfo.serverRank }}</span>
               </div>
               <div style="margin-left: 25px">
                 <div style="font-size: 12px">服务器在线时长</div>
-                <span class="playerRankText">15d 9h 50m</span>
+                <span class="playerRankText">{{ userInfo.onlineTime }}</span>
               </div>
               <div style="margin-left: 25px">
                 <div style="font-size: 12px">金草莓获得数</div>
-                <span class="playerRankText">35</span>
+                <span class="playerRankText">{{
+                  userInfo.goldStrawberry
+                }}</span>
               </div>
               <div style="margin-left: 25px">
                 <div style="font-size: 12px">总关卡通关数</div>
-                <span class="playerRankText">19952</span>
+                <span class="playerRankText">{{
+                  userInfo.globalPasslevel
+                }}</span>
               </div>
             </div>
             <div></div>
@@ -51,17 +63,21 @@
           <el-card class="player_main">
             <span class="title">个人介绍</span>
             <div style="margin-top: 20px; font-size: 14px">
-              <span>这个人很懒~ 什么都没写！</span>
+              <span>{{ userInfo.userDescription }}</span>
             </div>
           </el-card>
         </el-row>
         <el-row>
           <el-card class="playerScore">
             <span class="title">最近通关</span>
-            <div class="scoreDisplay">
+            <div
+              class="scoreDisplay"
+              v-for="score in userInfo.userScoreOver30Day"
+              :key="score"
+            >
               <div>
-                <a>Small_Miao</a> 在 24分钟 前 通关 (金草莓)
-                <a>Celeste-被遗忘的城市</a>
+                <a>Small_Miao</a> 在 {{ score.levelPassDate }} 通关 (金草莓)
+                <a :href="score.levelUrl">{{ score.levelName }}</a>
               </div>
             </div>
           </el-card>
@@ -69,20 +85,19 @@
         <el-row>
           <el-card class="playerScoreTop">
             <span class="title">成绩</span>
-            <div class="scoreDisplay">
+            <div
+              class="scoreDisplay"
+              v-for="score in userInfo.userBest50"
+              :key="score"
+            >
               <el-card class="scoreInfo" style="margin-bottom: 5px">
                 <div class="scoreInfoHeader">
-                  <a>Celeste-被遗忘的城市</a>
-                  <span>25天前</span>
+                  <a :href="score.levelUrl">{{ score.levelName }}</a>
+                  <span>{{ score.levelPassDate }}</span>
                 </div>
-                <div class="scoreInfoDy"><span>通关时间: 15m 32s</span></div>
-              </el-card>
-              <el-card class="scoreInfo" style="margin-bottom: 5px">
-                <div class="scoreInfoHeader">
-                  <a>Celeste-被遗忘的城市 (金草莓)</a>
-                  <span>25天前</span>
+                <div class="scoreInfoDy">
+                  <span>通关时间: {{ score.levelPasstime }} s</span>
                 </div>
-                <div class="scoreInfoDy"><span>通关时间: 15m 32s</span></div>
               </el-card>
               <el-card class="loadMore" style="margin-bottom: 5px">
                 加载更多
@@ -97,6 +112,44 @@
     >
   </a-layout>
 </template>
+<script>
+export default {
+  data() {
+    return {
+      userInfo: {
+        userName: "Small_Miao",
+        tags: [
+          {
+            tagName: "Stuff",
+            tagColor: "#2db7f5",
+          },
+        ],
+        serverRank: "1",
+        onlineTime: "15d 8h 5m",
+        goldStrawberry: "15",
+        globalPasslevel: "135",
+        userDescription: "这个人很懒~ 什么都没写！",
+        userScoreOver30Day: [
+          {
+            levelName: "Celeste-被遗忘的城市",
+            levelUrl: "/score/Celeste-B1",
+            levelPasstime: "315.3",
+            levelPassDate: "2022/08/01 - 18:52",
+          },
+        ],
+        userBest50: [
+          {
+            levelName: "Celeste-被遗忘的城市",
+            levelUrl: "/score/Celeste-B1",
+            levelPasstime: "315.3",
+            levelPassDate: "2022/08/01 - 18:52",
+          },
+        ],
+      },
+    };
+  },
+};
+</script>
 <style>
 @font-face {
   font-family: "Torus Pro";

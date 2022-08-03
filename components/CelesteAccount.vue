@@ -17,7 +17,7 @@
       >
     </div>
     <div v-show="isLogin">
-
+      <el-button>查看我的个人资料~</el-button>
     </div>
   </el-card>
 </template>
@@ -26,21 +26,21 @@ export default {
   props: {
     showLoginDialog: Function,
   },
-  data(){
-    return{
-      isLogin:false,
-      userData:{}
-    }
+  data() {
+    return {
+      isLogin: false,
+      userData: {},
+    };
   },
-  methods:{
-    setUserInfo(userName,preFixList,nowPrefix,image){
-        this.userData.name = userName;
-        this.userData.preFixList = preFixList;
-        this.userData.nowPrefix = nowPrefix;
-        this.userData.image = image;
-        this.isLogin = true;
-    }
-  }
+  methods: {
+    setUserInfo(userName, preFixList, nowPrefix, image) {
+      this.userData.name = userName;
+      this.userData.preFixList = preFixList;
+      this.userData.nowPrefix = nowPrefix;
+      this.userData.image = image;
+      this.isLogin = true;
+    },
+  },
 };
 </script>
 <style>
