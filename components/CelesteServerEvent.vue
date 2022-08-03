@@ -1,9 +1,13 @@
 <template>
   <el-card class="event">
     <div slot="header">
-      <span style="font-size: 20px; font-weight: bold">群服活动</span>
+      <span style="font-size: 20px; font-weight: bold">群服更新日志</span>
     </div>
-    <el-skeleton :rows="6" animated />
+    <div style="padding:15px;">
+      <a-timeline pending="Dev..." :reverse="reverse">
+        <a-timeline-item>v 0.1.0 初步版本</a-timeline-item>
+      </a-timeline>
+    </div>
   </el-card>
 </template>
 <style>
