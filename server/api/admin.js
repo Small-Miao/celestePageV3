@@ -34,7 +34,8 @@ router.post('/admin/login',  async function (req, res) {
         'uid':rows[0].gm_uid,
         'gm_prefix':rows[0].gm_prefix,
         'bot_gold':rows[0].bot_gold,
-        'gm_color':rows[0].gm_color
+        'gm_color':rows[0].gm_color,
+        'invite_code':rows[0].invite_code,
       }
       req.session.USERINFO = USERINFO;
       // let token = utils.getUuid();
@@ -47,7 +48,8 @@ router.post('/admin/login',  async function (req, res) {
         'uid':rows[0].gm_uid,
         'gm_prefix':rows[0].gm_prefix,
         'bot_gold':rows[0].bot_gold,
-        'gm_color':rows[0].gm_color
+        'gm_color':rows[0].gm_color,
+        'invite_code':rows[0].invite_code
       })
     }else{
       res.json({
@@ -76,7 +78,7 @@ router.post('/admin/logout',  async function (req, res) {
  * 获取用户信息
  */
 router.post('/admin/getLoginUser',  async function (req, res) {
-  log('INFO', 'API', '/getLoginUser', 'POST', 'request!')
+  log.info('API', '/getLoginUser', 'POST', 'request!')
   let userInfo = req.session.USERINFO;
   if(userInfo){
     res.json({

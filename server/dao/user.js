@@ -1,4 +1,5 @@
 const sql = require('../sql')
+const util = require('../util/util.js')
 
 /**
  * 用户登录
@@ -82,7 +83,6 @@ async function edit(data){
     args.push(data.bot_gold);
     args.push(data.gm_color);
     let result = await sql.query(sqlSource,args);
-    console.dir(result);
     return result;
   }
 }
@@ -108,14 +108,60 @@ async function resetPassword(gm_uid,password){
   let result = await sql.query("update user set gm_password= ? where gm_uid =? ",[password,gm_uid])
   return result.affectedRows;
 }
+
+
+async function checkInviteCode(incite_code){
+  let sqlSource = "select count(gm_uid) zs from user where invite_code = ? ";
+  let args = new Array()
+  args.push(incite_code)
+  let result = await sql.query(sqlSource,args);
+  return result[0].zs;
+}
+
+async function register(username,password,email){
+  let sqlSource = " insert into user (gm_username,gm_password,gm_isban,bot_gold,gm_email) values(?,?,?,?,?) "
+  let args = new Array()
+  args.push(username);
+  args.push(password);
+  args.push(0);
+  args.push(0);
+  args.push(email);
+  let result = await sql.query(sqlSource,args);
+  return result;
+}
+
+
+async function getPlayerByInviteCode(invite_code){
+  let sqlSource = "select * from user where invited_code = ? ";
+  let args = new Array()
+  args.push(invite_code)
+  return await sql.query(sqlSource,args);
+}
+
+async function checkGmemail(emailurl){
+  let sqlSource = "select count(gm_uid) zs from user where gm_email = ? ";
+  let args = new Array()
+  args.push(emailurl)
+  let result = await sql.query(sqlSource,args);
+  return result[0].zs;
+}
+
+
+
+
+
 module.exports = {
   queryUserByAccountAndPassword,
   updateToken,
   count,
   listByPage,
+  checkInviteCode,
   checkUserName,
   edit,
   getUserByUid,
   deleteUser,
   resetPassword,
+  register,
+  getPlayerByInviteCode,
+  checkGmemail,
 };

@@ -3,6 +3,9 @@ const log = require('../log')
 const prefix = require('../dao/prefix.js')
 const responseModel = require('../util/responseModel.js')
 const router = express.Router();
+/**
+ * 获取所有用户的头衔和颜色
+ */
 router.post('/prefix/getUserList', async function (req, res) {
   let queryData = req.body;
   if(!queryData.uid){

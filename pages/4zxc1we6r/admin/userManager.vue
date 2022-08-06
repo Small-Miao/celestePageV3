@@ -85,7 +85,7 @@
       <el-pagination
         @current-change="handleCurrentChange"
         :current-page="currentPage"
-        :page-size="100"
+        :page-size="pagesize"
         layout="total, prev, pager, next"
         :total="total">
       </el-pagination>
@@ -405,7 +405,7 @@ export default {
       let self = this;
       this.$http({
         method: 'post',
-        url: '/api/user/getUser',
+        url: '/api/admin/user/getUser',
         data: {
           'gm_uid': gm_uid,
         }
