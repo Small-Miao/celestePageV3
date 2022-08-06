@@ -14,15 +14,31 @@ app.use(session({
 app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json
 app.use(bodyParser.json())
-app.use('/',require('./api/index.js'));
-app.use('/admin', require("./api/user.js"));
+app.use('/',require('./api/admin.js'));
+app.use('/admin/user', require("./api/user.js"));
+app.use('/admin/cdk', require("./api/cdk.js"));
 app.use('/', require("./api/normal.js"));
+
+/**
+ * 前台玩家登录的接口文件
+ */
+app.use('/player', require("./api/player.js"));
 
 
 //登录白名单 放到这个名单里的请求，都是可以不需要登录就可以访问的
-let LoginWhiteList  = ['/admin/login','/captcha'];
+let LoginWhiteList  = [
+  '/captcha',//登录验证码
+
+  '/admin/login',//后台登录
+  '/admin/getLoginUser',//获取后台是否登录
+
+  '/player/getPlayer',//获取玩家是否登录
+  '/player/register',//玩家注册
+  '/player/login',//玩家登录
+  '/player/sendCode',//注册发送验证码
+];
 /**
- * admin过滤
+ * 登录过滤
  * @param req
  * @param res
  * @param next
@@ -32,7 +48,6 @@ let filter = async (req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");　　//添加跨越访问控制
   //获取到访问地址
   let url = req._parsedUrl.pathname;
-  console.log(url)
   //查看是否在登录白名单内，如果在白名单内，则放行
   if(LoginWhiteList.indexOf(url) < 0){
     //不在登录白名单，查看用户是否登录
