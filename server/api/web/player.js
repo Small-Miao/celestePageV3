@@ -1,11 +1,11 @@
 const express = require('express')
-const log = require('../log')
-const user = require('../dao/user.js')
-const responseModel = require('../util/responseModel.js')
-const util = require('../util/util.js')
-const email = require('../util/email.js')
-const sendEmailLogDao = require('../dao/sendEmailLogDao.js')
-const application = require('../config/application.js')
+const log = require('../../log')
+const user = require('../../dao/web/user.js')
+const responseModel = require('../../util/responseModel.js')
+const util = require('../../util/util.js')
+const email = require('../../util/email.js')
+const sendEmailLogDao = require('../../dao/web/sendEmailLogDao.js')
+const application = require('../../config/application.js')
 const md5 = require("js-md5");
 const router = express.Router();
 
@@ -251,5 +251,128 @@ router.post('/register',   async function (req, res) {
     return;
   }
 })
+
+/**
+ * 忘记密码发送邮件
+ */
+router.post('/sendForgotPasswordEmailCode',   async function (req, res) {
+  log.info( 'API', '/sendForgotPasswordEmailCode', 'POST', 'request!')
+  let data = req.body;
+  let captcha = req.session.captcha;
+  if(util.regExpEmail(data.email) || !data.captcha || !captcha || captcha != data.captcha){
+    res.json({
+      message:'INVALID ARGUMENT',
+      code:400
+    })
+    return;
+  }
+  //检查当前email存在不存在
+  let rows = await user.getUserByEmail(data.email)
+  if(rows.length == 0){
+    res.json({
+      message:'NOT FOUND USERINFO',
+      code:401
+    })
+    return;
+  }
+  let userId = rows[0].gm_uid;
+  let code = util.getSixCode();
+  let response = await email.sendForgotPasswordCode(data.email,code);
+  req.session.FORGOT_PASSWORD_USERID = userId;
+  req.session.FORGOT_PASSWORD_EMAIL_CODE = code;
+  if(response == 1){
+    res.json({
+      message:'SENDCODE SUCCESS',
+      data:{
+        "username":rows[0].gm_username,
+      },
+      code:200
+    })
+    return;
+  }else{
+    res.json({
+      message:'SENDCODE FAIL',
+      code:402
+    })
+  }
+});
+
+/**
+ * 确认是否为密码丢失人，通过验证用户输入的emailcode和session中的是否一致。如果一致则在session里存放一个key为：canResetPassword，value为1
+ * 否则返回一个提示错误就ok
+ */
+router.post('/toResetPassword',   async function (req, res) {
+  log.info( 'API', '/resetPassword', 'POST', 'request!')
+  let data = req.body;
+  let email_code = req.session.FORGOT_PASSWORD_EMAIL_CODE;
+  if(util.regExpEmail(data.email) || !data.userid || !email_code){
+    res.json({
+      message:'INVALID ARGUMENT',
+      code:400
+    })
+    return;
+  }
+  if(email_code != data.email_code){
+    res.json({
+      message:'WRONG EMAILCODE',
+      code:401
+    })
+    return;
+  }
+  req.session.FORGOT_PASSWORD_EMAIL_CODE = "";
+  req.session.CAN_RESETPASSWORD = 1;
+  res.json({
+    message:'VERIFICATION SUCCESS',
+    code:200
+  });
+  return;
+});
+
+
+/**
+ * 重置密码
+ */
+router.post('/resetPassword',   async function (req, res) {
+  log.info( 'API', '/resetPassword', 'POST', 'request!')
+  let data = req.body;
+  let can_reset_password = req.session.CAN_RESETPASSWORD;
+  let userid = req.session.FORGOT_PASSWORD_USERID;
+  if(!can_reset_password || can_reset_password != 1 || !userid || userid <= 0){
+    res.json({
+      message:'ILLEGAL REQUEST',
+      code:400
+    })
+    return;
+  }
+  let password = data.password;
+  let comfirm_password = data.comfirm_password;
+  if(!password || !comfirm_password || password != comfirm_password) {
+    res.json({
+      message:'WRONG PASSWORD',
+      code:401
+    })
+    return;
+  }
+  password = md5(password)
+  let result = await user.resetPassword(userid,password);
+  if(result == 1){
+    res.json({
+      message:'RESETPASSWORD SUCCESS',
+      code:200
+    })
+    req.session.FORGOT_PASSWORD_USERID = '';
+    req.session.CAN_RESETPASSWORD = 0;
+    return;
+  }else{
+    res.json({
+      message:'RESETPASSWORD FAIL',
+      code:402
+    })
+    return;
+  }
+});
+
+
+
 
 module.exports = router;

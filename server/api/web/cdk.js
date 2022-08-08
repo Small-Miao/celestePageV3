@@ -1,8 +1,8 @@
 const express = require('express')
-const log = require('../log')
-const cdkDao = require('../dao/cdkDao.js')
-const responseModel = require("../util/responseModel");
-const util = require('../util/util.js')
+const log = require('../../log')
+const cdkDao = require('../../dao/web/cdkDao.js')
+const responseModel = require("../../util/responseModel");
+const util = require('../../util/util.js')
 const router = express.Router();
 
 /**

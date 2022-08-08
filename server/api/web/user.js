@@ -1,8 +1,8 @@
 const express = require('express')
-const log = require('../log')
-const user = require('../dao/user.js')
+const log = require('../../log')
+const user = require('../../dao/web/user.js')
 const md5 = require('js-md5')
-const responseModel = require('../util/responseModel.js')
+const responseModel = require('../../util/responseModel.js')
 const router = express.Router();
 /**
  * 获取用户列表

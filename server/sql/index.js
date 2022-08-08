@@ -17,6 +17,7 @@ query = async function(sql,data) {
         console.dir(result)
       }
       resolve(result);
+
     })
   })
 }

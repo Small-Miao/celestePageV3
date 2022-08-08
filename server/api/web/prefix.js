@@ -1,7 +1,7 @@
 const express = require('express')
-const log = require('../log')
-const prefix = require('../dao/prefix.js')
-const responseModel = require('../util/responseModel.js')
+const log = require('../../log')
+const prefix = require('../../dao/web/prefix.js')
+const responseModel = require('../../util/responseModel.js')
 const router = express.Router();
 /**
  * 获取所有用户的头衔和颜色

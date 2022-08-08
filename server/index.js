@@ -14,15 +14,16 @@ app.use(session({
 app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json
 app.use(bodyParser.json())
-app.use('/',require('./api/admin.js'));
-app.use('/admin/user', require("./api/user.js"));
-app.use('/admin/cdk', require("./api/cdk.js"));
-app.use('/', require("./api/normal.js"));
+app.use('/',require('./api/web/admin.js'));
+app.use('/admin/user', require("./api/web/user.js"));
+app.use('/admin/cdk', require("./api/web/cdk.js"));
+app.use('/', require("./api/web/normal.js"));
+app.use('/client', require("./api/client/map.js"));
 
 /**
  * 前台玩家登录的接口文件
  */
-app.use('/player', require("./api/player.js"));
+app.use('/player', require("./api/web/player.js"));
 
 
 //登录白名单 放到这个名单里的请求，都是可以不需要登录就可以访问的

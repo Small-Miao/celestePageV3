@@ -1,9 +1,9 @@
 const express = require('express')
-const log = require('../log')
+const log = require('../../log')
 const router = express.Router();
-const user = require('../dao/user.js')
+const user = require('../../dao/web/user.js')
 const md5 = require('js-md5')
-const utils = require('../util/util.js')
+const utils = require('../../util/util.js')
 /**
  * admin登录
  */

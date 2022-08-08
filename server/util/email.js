@@ -51,6 +51,32 @@ async function sendCode(emailurl,code){
   }
 }
 
+
+
+async function sendForgotPasswordCode(emailurl,code){
+  if(config.limitSendErrNum <= errNum){
+    return -1;
+  }
+  let mailOptions = {
+    from: config.from,
+    //   收件人的邮箱 可加 ","添加多个收件人
+    to: emailurl,
+    //   标题
+    subject: "蔚蓝忘记密码验证",
+    //   内容
+    text: "你好",
+    html: "<div>【蔚蓝群服MiaoNet】您正在尝试重置蔚蓝群服MiaoNet的密码，验证码：<b>"+code+"</b>,5分钟内有效</div>",
+  };
+  try{
+    let res = await transport.sendMail(mailOptions);
+    return 1;
+  }catch (e){
+    return 0;
+  }
+}
+
+
 module.exports = {
-  sendCode
+  sendCode,
+  sendForgotPasswordCode,
 }
