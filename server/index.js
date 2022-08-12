@@ -14,16 +14,7 @@ app.use(session({
 app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json
 app.use(bodyParser.json())
-app.use('/',require('./api/web/admin.js'));
-app.use('/admin/user', require("./api/web/user.js"));
-app.use('/admin/cdk', require("./api/web/cdk.js"));
-app.use('/', require("./api/web/normal.js"));
-app.use('/client', require("./api/client/map.js"));
 
-/**
- * 前台玩家登录的接口文件
- */
-app.use('/player', require("./api/web/player.js"));
 
 
 //登录白名单 放到这个名单里的请求，都是可以不需要登录就可以访问的
@@ -32,6 +23,7 @@ let LoginWhiteList  = [
 
   '/admin/login',//后台登录
   '/admin/getLoginUser',//获取后台是否登录
+  '/admin/logout',//用户登出
 
   '/player/getPlayer',//获取玩家是否登录
   '/player/register',//玩家注册
@@ -67,6 +59,19 @@ let filter = async (req, res, next) => {
   next();
 }
 app.use(filter);
+/**
+ * 这些配置必须放到filter下，否则filter不生效
+ */
+app.use('/',require('./api/web/admin.js'));
+app.use('/admin/user', require("./api/web/user.js"));
+app.use('/admin/cdk', require("./api/web/cdk.js"));
+app.use('/', require("./api/web/normal.js"));
+app.use('/client', require("./api/client/map.js"));
+
+/**
+ * 前台玩家登录的接口文件
+ */
+app.use('/player', require("./api/web/player.js"));
 
 app.listen(port,()=>{
     log.info("Express",undefined,undefined,`Server Listening on port ${port}`);

@@ -1,6 +1,7 @@
 const express = require('express')
 const log = require('../../log')
 const cdkDao = require('../../dao/web/cdkDao.js')
+const user = require('../../dao/web/user.js')
 const responseModel = require("../../util/responseModel");
 const util = require('../../util/util.js')
 const router = express.Router();
@@ -70,6 +71,31 @@ router.post('/generate', async function (req, res) {
   })
   return;
 })
+
+
+/**
+ * 删除多个cdk，不检查是否已经兑换的问题
+ */
+router.post("/delete",async function(req,res){
+  let data = req.body;
+  let arr = data.cdkids;
+  if(arr.length == 0){
+    res.json({
+      message:'INVALID ARGUMENT',
+      code:400
+    })
+    return;
+  }
+  let result = 0;
+  for(let i = 0;i<arr.length;i++){
+    result += await cdkDao.del(arr[i]);
+  }
+  res.json({
+    code:200,
+    message:'DELETE SUCCESS'
+  });
+})
+
 
 
 module.exports = router;

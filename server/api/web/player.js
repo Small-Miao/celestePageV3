@@ -7,6 +7,7 @@ const email = require('../../util/email.js')
 const sendEmailLogDao = require('../../dao/web/sendEmailLogDao.js')
 const application = require('../../config/application.js')
 const md5 = require("js-md5");
+const cdkDao = require("@/server/dao/web/cdkDao");
 const router = express.Router();
 
 /**
@@ -374,5 +375,60 @@ router.post('/resetPassword',   async function (req, res) {
 
 
 
+/**
+ * 兑换CDK
+ */
+router.post("/exchangeCdk",async function(req,res){
+    let data = req.body;
+    let cdk = data.cdk;
+    //获取当前登录的玩家
+    let userInfo = req.session.PLAYER_USERINFO;
+    if(!userInfo){
+      res.json({
+        code:400,
+        message:"NOT FOUND PLAYER USERINFO"
+      });
+      return;
+    }
+    if(!cdk){
+      res.json({
+        message:'INVALID ARGUMENT',
+        code:401
+      })
+      return;
+    }
+    let rows = await cdkDao.getCDK(cdk);
+    if(rows.length == 0 || rows.length > 1){
+      res.json({
+        message:'ERROR CDK',
+        code:402
+      })
+      return;
+    }
+    //查看当前CDK是否已经被兑换
+    if(rows[0].used == 1){
+      res.json({
+        message:'CDK BE USED',
+        code:403
+      })
+      return;
+    }
+    let resourceType = rows[0].resource_type;
+    let result = 0;
+    if(resourceType == 0){
+      result += await user.updatePrefix(row[0].resource,userInfo.uid);
+    }else{
+      result += await user.updateColor(row[0].resource,userInfo.uid);
+    }
+    if(result == 1){
+      await cdkDao.useCDK(rows[0].cdkid);
+    }
+
+    res.json({
+      code:200,
+      message:"EXCHANGE SUCCESS"
+    })
+  }
+)
 
 module.exports = router;

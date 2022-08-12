@@ -19,7 +19,7 @@
       </div>
       <div class="actionbar">
         <el-button type="primary" @click="generate">生成</el-button>
-        <el-button type="danger" :disabled="multipleSelection.length == 0" >删除</el-button>
+        <el-button type="danger" @click="deleteMore" :disabled="multipleSelection.length == 0" >删除</el-button>
       </div>
     </div>
     <el-table
@@ -90,6 +90,7 @@
                     <el-button
                       size="mini"
                       type="danger"
+                      @click="delBtn(scope.row.cdkid)"
                     >删除</el-button>
         </template>
       </el-table-column>
@@ -239,7 +240,7 @@ export default {
     handleSelectionChange(val) {
       this.multipleSelection = [];
       val.forEach((row,index) => {
-        this.multipleSelection.push(row.gm_uid);
+        this.multipleSelection.push(row.cdkid);
       })
     },
 
@@ -286,6 +287,58 @@ export default {
     },
     changeResourceType(){
       this.cdkModel.resource='';
+    },
+
+    deletePost(arr){
+      let self = this;
+      this.$http({
+        method: 'post',
+        url: '/api/admin/cdk/delete',
+        data: {
+          'cdkids': arr
+        }
+      }).then((res)=>{
+        if(res.data.code == 200){
+          self.$message.success("删除成功");
+          self.queryData();
+        }else{
+          self.$message.error("删除失败");
+        }
+      }).catch((err)=>{
+        console.log(err);
+      })
+    },
+
+    delBtn(cdkid){
+      let self = this;
+      this.$confirm('此操作不可恢复, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        let arr = new Array();
+        arr.push(cdkid);
+        self.deletePost(arr);
+      }).catch(() => {
+        //do nothing
+      });
+    },
+
+    deleteMore(){
+      if(this.multipleSelection.length == 0){
+        this.$message.error("至少选中一条数据")
+        return;
+      }
+      let self = this;
+      this.$confirm('此操作不可恢复, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        self.deletePost(self.multipleSelection);
+      }).catch(() => {
+        //do nothing
+      });
     },
 
     goBack(){

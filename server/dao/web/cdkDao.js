@@ -9,17 +9,17 @@ const util = require('../../util/util.js')
  */
 async function count(query){
   let sqlSource = "select count(cdkid) zs from cdks where 1=1  ";
-  let args = new Array()
+  let args = new Array();
   if(query.keyword){
     args.push(query.keyword)
     args.push(query.keyword)
     sqlSource += " and ( cdk like concat('%',?,'%') or  resource like concat('%',?,'%') )"
   }
-  if(query.resourceType && query.resourceType <=1){
+  if(query.resourceType >=0 && query.resourceType <=1){
     args.push(query.resourceType)
     sqlSource += " and resource_type = ? "
   }
-  if(query.used  && query.used <=1){
+  if(query.used>=0  && query.used <=1){
     args.push(query.used)
     sqlSource += " and used = ? "
   }
@@ -36,11 +36,11 @@ async function listByPage(query,page,pagesize){
     args.push(query.keyword)
     sqlSource += " and ( cdk like concat('%',?,'%') or  resource like concat('%',?,'%') )"
   }
-  if(query.resourceType  && query.resourceType <=1){
+  if(query.resourceType >=0 && query.resourceType <=1){
     args.push(query.resourceType)
     sqlSource += " and resource_type = ? "
   }
-  if(query.used  && query.used <=1){
+  if(query.used>=0  && query.used <=1){
     args.push(query.used)
     sqlSource += " and used = ? "
   }
@@ -67,8 +67,26 @@ async function insert(resource,resource_type,starttime,endtime){
   return result;
 }
 
+
+async function del(cdkid){
+  let result = await sql.query("delete from cdks where cdkid =?",[cdkid]);
+  return result.affectedRows;
+}
+
+async function getCDK(cdk){
+  return await sql.query("select * from cdks where cdk= ?",[cdk]);
+}
+
+async function useCDK(cdkid){
+  let result = await sql.query("update cdks set used = 1 where cdkid =?",[cdkid]);
+  return result.affectedRows;
+}
+
 module.exports = {
   count,
   listByPage,
-  insert
+  insert,
+  del,
+  getCDK,
+  useCDK,
 };

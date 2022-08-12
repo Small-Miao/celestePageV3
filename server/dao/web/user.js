@@ -154,6 +154,16 @@ async function getUserByEmail(email){
 }
 
 
+async function updatePrefix(prefix,uid){
+  let result = await sql.query("update user set gm_prefix=? where gm_uid = ?",[prefix,uid])
+  return result.affectedRows;
+}
+
+async function updateColor(color,uid){
+  let result = await sql.query("update user set gm_color=? where gm_uid = ?",[color,uid])
+  return result.affectedRows;
+}
+
 
 module.exports = {
   queryUserByAccountAndPassword,
@@ -170,4 +180,6 @@ module.exports = {
   getPlayerByInviteCode,
   checkGmemail,
   getUserByEmail,
+  updatePrefix,
+  updateColor,
 };
