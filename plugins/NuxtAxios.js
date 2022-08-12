@@ -1,30 +1,28 @@
 import Vue from 'vue'
 import axios from 'axios'
 import store from 'store'
-export default ({ redirect, $axios, app }) => {
-  $axios.onRequest(config => {
-    return new Promise((resolve, reject) => {
-      //match api
-      let token = localStorage.getItem("token")
-      //add token
-      if (token) {
-        config.headers.Authorization = token;
-      }
-      //其他的请求前业务逻辑 比如：api map
-      resolve(config);
-    })
-  });
+// 添加请求拦截器
+axios.interceptors.request.use(function (config) {
+  //发送请求之前做一些事情
+  return config;
+}, function (error) {
+  //捕捉错，对错误进行处理
+  return Promise.reject(error);
+});
 
-  $axios.onResponse(res => {
-    return new Promise((resolve, reject) => {
-      //返回数据逻辑处理 比如：error_code错误处理
-      resolve(res.data);
-    })
-  });
-
-  $axios.onError(config => {
-    console.log('Making request to ' + config.url)
-  })
-};
+// 添加响应拦截器
+axios.interceptors.response.use(function (response) {
+  //对响应结果做一些处理
+  /*
+  　　　　if(data.code===200){
+  　　　　　　return data.data
+  　　　　}else{
+  　　　　　return response　
+  　　　　}
+  　　*/
+  return response;
+}, function (error) {
+  return Promise.reject(error);
+});
 //为axios起一个别名
 Vue.prototype.$http = axios;

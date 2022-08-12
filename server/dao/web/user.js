@@ -1,5 +1,5 @@
-const sql = require('../sql')
-const util = require('../util/util.js')
+const sql = require('../../sql')
+const util = require('../../util/util.js')
 
 /**
  * 用户登录
@@ -146,8 +146,23 @@ async function checkGmemail(emailurl){
   return result[0].zs;
 }
 
+async function getUserByEmail(email){
+  let sqlSource = "select * from user where gm_email=?"
+  let args = new Array()
+  args.push(email)
+  return await sql.query(sqlSource,args);
+}
 
 
+async function updatePrefix(prefix,uid){
+  let result = await sql.query("update user set gm_prefix=? where gm_uid = ?",[prefix,uid])
+  return result.affectedRows;
+}
+
+async function updateColor(color,uid){
+  let result = await sql.query("update user set gm_color=? where gm_uid = ?",[color,uid])
+  return result.affectedRows;
+}
 
 
 module.exports = {
@@ -164,4 +179,7 @@ module.exports = {
   register,
   getPlayerByInviteCode,
   checkGmemail,
+  getUserByEmail,
+  updatePrefix,
+  updateColor,
 };

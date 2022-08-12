@@ -1,4 +1,4 @@
-const sql = require('../sql')
+const sql = require('../../sql')
 
 /**
  * 查询出用户的所有头衔

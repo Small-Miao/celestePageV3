@@ -1,5 +1,5 @@
-const sql = require('../sql')
-const util = require('../util/util.js')
+const sql = require('../../sql')
+const util = require('../../util/util.js')
 
 
 /**
