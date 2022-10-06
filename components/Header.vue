@@ -71,7 +71,8 @@ export default {
   top: calc(15% - 96px);
   float: right;
   right: 2%;
-  width: 5%;
+  /* width: 5%; */
+  width: 7%;
   max-width: calc(2197px / 4);
   max-height: calc(200px / 4);
   transform: translate(-50%, -50%);

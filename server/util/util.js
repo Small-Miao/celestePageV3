@@ -105,8 +105,11 @@ let getIp = function(req) {
 let getToday = function (){
   //今天时间
   let today = new Date();
-  today.setDate(today.getDate());
-  return  today.format("yyyy-MM-dd");
+  today = today.toLocaleDateString();
+  // today.setDate(today.getDate());
+  // return  today.format("yyyy-MM-dd");
+  console.log(today);
+  return today;
 }
 
 /**
