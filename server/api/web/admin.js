@@ -70,7 +70,6 @@ router.post('/admin/logout',  async function (req, res) {
       message: 'LOGOUT SUCCESS',
     })
   });
-
 });
 
 

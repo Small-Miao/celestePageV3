@@ -5,7 +5,9 @@
     style="border-radius: 12px; box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1)"
   >
     <div slot="header">
-      <span style="font-size: 20px; font-weight: bold">账号</span>
+      <span v-show="!isLogin" style="font-size: 20px; font-weight: bold">账号</span>
+      <span v-show="isLogin">您好，<span :style="userStyle">【{{userData.preFixList}}】</span>{{userData.name}} ！ </span>
+      <span v-show="isLogin" style="float : right"><el-button  @click="logout" type="text">[退出]</el-button></span>
     </div>
     <div v-show="!isLogin">
       <span style="font-size: 14px">
@@ -22,6 +24,8 @@
   </el-card>
 </template>
 <script>
+import { nullLiteral } from '@babel/types';
+
 export default {
   props: {
     showLoginDialog: Function,
@@ -29,17 +33,73 @@ export default {
   data() {
     return {
       isLogin: false,
-      userData: {},
+      userData: {
+        name: '',
+        preFixList: '',
+      },
+      userStyle:{
+        color:'#FFFFFF',
+        fontWeight:'bold'
+      }
     };
   },
+  mounted() {
+    this.init();
+  },
   methods: {
-    setUserInfo(userName, preFixList, nowPrefix, image) {
+    init(){
+      let info = sessionStorage.getItem("PLAYER_USERINFO");
+      //这里有一个坑，如果没有获取到用户信息，返回一个null字符串
+      let userinfo  = undefined;
+      try{
+        userinfo = eval ("(" + info + ")")
+      }catch (e){
+
+      }
+      if(userinfo){
+        this.isLogin = true;
+        this.setUserInfo(userinfo.userName,userinfo.userPrefix,userinfo.color)
+      }else{
+        this.isLogin = false;
+      }
+      
+    },
+    // , , nowPrefix, image
+    setUserInfo(userName, preFixList, color) {
       this.userData.name = userName;
       this.userData.preFixList = preFixList;
-      this.userData.nowPrefix = nowPrefix;
-      this.userData.image = image;
+      // this.userData.nowPrefix = nowPrefix;
+      this.userStyle.color = color;
       this.isLogin = true;
     },
+    logout(){
+        // this.isLogin = false;
+        // sessionStorage.setItem("PLAYER_USERINFO", undefined);
+
+        let self = this;
+        this.$http({
+          method: 'post',
+          url: '/api/player/logout',
+        }).then((res) => {
+          // console.log(res.data.code);
+          if(res.data.code === 200) {
+            this.isLogin = false;
+            sessionStorage.setItem("PLAYER_USERINFO", null);
+            self.$message({
+              message: "退出成功",
+              type: "success",
+              showClose: true,
+            });
+            self.$router.push('/');
+          }else{
+            self.$message({
+              message: "未知错误",
+              type: "error",
+              showClose: true,
+            });
+          }
+        });
+        }
   },
 };
 </script>

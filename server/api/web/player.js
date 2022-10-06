@@ -7,14 +7,14 @@ const email = require('../../util/email.js')
 const sendEmailLogDao = require('../../dao/web/sendEmailLogDao.js')
 const application = require('../../config/application.js')
 const md5 = require("js-md5");
-const cdkDao = require("@/server/dao/web/cdkDao");
+const cdkDao = require("../../dao/web/cdkDao");
 const router = express.Router();
 
 /**
  *  玩家登录接口
  */
 router.post('/login', async function (req, res) {
-  let queryData = req.body;
+  // let queryData = req.body;
   let data = req.body;
   if(!data.username || !data.password || !data.code){
     res.json({
@@ -23,16 +23,18 @@ router.post('/login', async function (req, res) {
     })
     return;
   }
-  let captcha = req.session.captcha;
+  let captcha = req.session['captcha'];
   req.session.captcha = null;
   if (!captcha || data.code.toLowerCase() !== captcha) {
     res.send({
       message:'WRONG CAPTCHA',
       code:401
     })
-    return
+    return;
   }
+
   let password = md5(data.password)
+
   let rows = await user.queryUserByAccountAndPassword(data.username,password);
   if(rows.length > 0 && rows.length == 1) {
 
@@ -65,6 +67,22 @@ router.post('/login', async function (req, res) {
 
 
 /**
+ *  玩家退出接口
+ */
+
+router.post('/logout', async function (req, res) {
+  // 为什么是POST方法
+  log.info('API', '/logout', 'POST', 'request!')
+  //  根据什么判断退出成功
+  req.session.PLAYER_USERINFO = undefined;
+  res.json({
+    code: 200,
+    message: 'LOGOUT SUCCESS',  
+  })
+});
+
+
+/**
  * 同一个Session中确认是否有玩家登录了
  */
 router.post('/getPlayer',  async function (req, res) {
@@ -92,19 +110,22 @@ router.post('/getPlayer',  async function (req, res) {
 router.post('/checkUsername',  async function (req, res) {
   log.info( 'API', '/checkUsername', 'POST', 'request!')
   let queryData = req.body;
-  let gm_username  = queryData.gm_username;
-  if(!gm_username){
+  let username  = queryData.username;
+  if(!username){
     res.json({
       message:'INVALID ARGUMENT',
       code:400
     })
     return;
   }
-  let count = await user.checkUserName(gm_username,null);
+  
+  let count =  user.checkUserName(username,null);
   let result = {
     "exist":count > 0,
   }
+  //  responseModel 
   result = responseModel.success(result,"SUCCESS");
+  console.log(result);
   res.json(result);
 })
 
@@ -150,8 +171,29 @@ router.post('/checkInviteCode',  async function (req, res) {
  */
 router.post('/sendCode',  async function (req, res) {
   log.info( 'API', '/sendCode', 'POST', 'request!')
-  let queryData = req.body
+  let queryData = req.body;
+  let captcha = req.session['captcha'];
+  req.session.captcha = null;
+
+  if (!queryData.code || !captcha || queryData.code.toLowerCase() !== captcha) {
+    res.send({
+      message:'WRONG CAPTCHA',
+      code:407
+    })
+    return;
+  }
+  
+  let session_emil_code = req.session.EMAIL_CODE;
+  if(session_emil_code) {
+    res.json({
+      message:'EMAILCODE SENDED',
+      code:408
+    })
+    return;
+  }
+
   let emailurl  = queryData.email;
+  
   //校验邮箱是否已经注册
   let userNum = await user.checkGmemail(emailurl)
   if(userNum > 0){
@@ -209,15 +251,31 @@ router.post('/sendCode',  async function (req, res) {
 router.post('/register',   async function (req, res) {
   log.info( 'API', '/register', 'POST', 'request!')
   let data = req.body;
-  if(!data.username || util.regExpEmail(data.email)|| !data.password || !data.comfirm_password || (data.password != data.comfirm_password ) || !data.email_code){
+  // console.dir(data.username,data.email,data.password,data.comfirm_password,data.email_code);
+  if(!data.username || !util.regExpEmail(data.email)|| !data.password || !data.comfirm_password || (data.password !== data.comfirm_password) || !data.email_code){
+    // console.log(data.code, data.username, util.regExpEmail(data.email), data.password, data.comfirm_password, data.password !== data.comfirm_password, data.email_code);
     res.json({
       message:'INVALID ARGUMENT',
       code:400
     })
     return;
   }
+
+  // let captcha = req.session.captcha;
+  // req.session.captcha = null;
+  // if (!captcha || data.code.toLowerCase() !== captcha) {
+  //   res.send({
+  //     message:'WRONG CAPTCHA',
+  //     code:401
+  //   })
+  //   return;
+  // }
+
   //校验邮箱是否已经存在
   let userNum = await user.checkGmemail(data.email)
+  console.log(userNum);
+  console.log('邮箱是',data.email);
+
   if(userNum > 0){
     res.json({
       message:'EMAIL WAS EXISTES ALREARY',
@@ -233,6 +291,7 @@ router.post('/register',   async function (req, res) {
     })
     return;
   }
+
   //校验用户名是否有效
   let count1 = await user.checkUserName(data.username,null);
   if(count1 == 0){
@@ -241,6 +300,7 @@ router.post('/register',   async function (req, res) {
     //校验成功直接给session中的验证码给清空掉
     req.session.EMAIL_CODE = '';
     res.json({
+      username: data.username,
       code:200,
       message:'SUCCESS'
     })

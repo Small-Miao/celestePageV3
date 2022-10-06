@@ -9,7 +9,7 @@ app.use(session({
   resave:false,                          //是否定期更新已经存到store中的session
   secret:"MiaoNet",                        //用于加密connect.sid(用于寻找session的id，存在于cookie中)
   rolling:true,                          //是否在用户每次请求时重置cookie(connect.sid)的生存时间
-  cookie:{maxAge:30*60*1000}             //cookie（connect.sid）的生存时间，也是session的生存时间
+  cookie:{maxAge:30*60*1000}             //cookie（connect.sid）的生存时间，也是session的生存时间 （半小时）  单位 毫秒 
 }));
 app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json
@@ -24,11 +24,14 @@ let LoginWhiteList  = [
   '/admin/login',//后台登录
   '/admin/getLoginUser',//获取后台是否登录
   '/admin/logout',//用户登出
+  
 
   '/player/getPlayer',//获取玩家是否登录
   '/player/register',//玩家注册
   '/player/login',//玩家登录
+  '/player/logout',//玩家登出
   '/player/sendCode',//注册发送验证码
+  '/player/checkUsername', // 检查用户名
 ];
 /**
  * 登录过滤
